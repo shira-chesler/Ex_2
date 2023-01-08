@@ -30,4 +30,4 @@ The test checks functionality and execution of tasks with different priorities u
 Tasks with callables that returns different values, and checks the getMaxPriority function in O(1) time.
 
 Class Diagram:
-![דיאגרמת מחלקות חלק 2.jpg](..%2F..%2F..%2F..%2F%3F%3F%3F%3F%3F%2F%3F%3F%3F%20%3F%2F%3F%3F%3F%3F%3F%20%3F%2F%3F%3F%3F%3F%3F%20%3F%3F%3F%3F%3F%20%3F%3F%3F%3F%3F%2F%3F%3F%3F%3F%3F%2F%3F%3F%3F%3F%202%2F%3F%3F%3F%3F%3F%3F%3F%20%3F%3F%3F%3F%3F%3F%20%3F%3F%3F%202.jpg)
+![דיאגרמת מחלקות חלק 2](https://user-images.githubusercontent.com/98814442/211212791-5b9cf8ec-15cd-4a08-9beb-d5414814cb61.jpg)
