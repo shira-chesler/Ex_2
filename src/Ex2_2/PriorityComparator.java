@@ -9,7 +9,7 @@ public class PriorityComparator implements Comparator<Task> {
         TaskType o1_type = o1.getTaskType();
         TaskType o2_type = o2.getTaskType();
         if(!(o1_type == o2_type)){
-            if (o1_type.compareTo(o2_type)>0){
+            if (o2_type.compareTo(o1_type)>0){
                 return -1;
             }
             else {
