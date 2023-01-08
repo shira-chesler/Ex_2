@@ -7,8 +7,8 @@ import java.util.concurrent.FutureTask;
 public class Task<T> implements Callable<T>{
     private Callable task;
     private TaskType priority;
-    private FutureTask myvalue;
-    private CustomExecutor myex;
+    private FutureTask<T> myvalue;
+    private CustomExecutor myex=null;
 
     private <V> Task(Callable<V> task, TaskType type){
         this.task = task;
@@ -20,7 +20,7 @@ public class Task<T> implements Callable<T>{
         this.task = task;
         this.priority = TaskType.OTHER;
         this.priority.setPriority(10);
-        this.myvalue = new FutureTask<V>(this.task);
+        this.myvalue = new FutureTask<T>(this.task);
     }
 
     public FutureTask getFuture(){
@@ -28,8 +28,14 @@ public class Task<T> implements Callable<T>{
     }
 
     public static <V> Task<V> createTask(Callable<V> task, TaskType type){ //factory method to create instances
-        Task<V> tsk = new Task(task, type);
-        return tsk;
+        if (type.getType() == TaskType.COMPUTATIONAL){
+            return new Task(task, type);
+        } else if (type.getType() == TaskType.IO) {
+            return new Task(task, type);
+        } else if (type.getType() == TaskType.OTHER) {
+            return new Task(task, type);
+        }
+        return null;
     }
 
     public static <V> Task<V> createTask(Callable<V> task){ //factory method to create instances
@@ -48,7 +54,11 @@ public class Task<T> implements Callable<T>{
     public void setPriority(int priority) {
         try {
             this.priority.setPriority(priority);
-            this.myex.sortQueue();
+            if (this.myex!=null){
+                if (myex.getQueue().remove(this)){
+                    myex.submit(this);
+                }
+            }
         }
         catch (IllegalArgumentException e){
             System.out.println("int given not okay as priority");
@@ -59,6 +69,6 @@ public class Task<T> implements Callable<T>{
     public T call() throws Exception {
         Thread th = new Thread(this.myvalue);
         th.start();
-        return ((FutureTask<T>)this.myvalue).get();
+        return this.myvalue.get();
     }
 }
