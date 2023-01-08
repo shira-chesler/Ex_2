@@ -14,6 +14,8 @@ public class CustomExecutor extends Thread{
     private int sizeofpool;
     private int minimalcapacity;
     private boolean isDaemon;
+    private boolean terminate;
+    private Object wait=new Object();
 
     public CustomExecutor(){
         setSizeOfPool();
@@ -40,6 +42,10 @@ public class CustomExecutor extends Thread{
         synchronized (lock){
             Qtask.add(tsk);
         }
+        synchronized (wait){
+            wait.notify();
+        }
+        this.current_max = this.Qtask.peek().getTaskType().getPriorityValue();
         tsk.setExecutor(this);
         return tsk.getFuture();
     }
@@ -66,10 +72,19 @@ public class CustomExecutor extends Thread{
                 if (this.capacity_of_pool<poolsize){
                     for (int i = 0; i < this.pool.length; i++) {
                         if (pool[i]==null || pool[i].isDone()){
-                            synchronized (lock){
-                                //sortQueue();
-                                pool[i] = Qtask.poll().getFuture();
+                            if (pool[i]==null){
                                 capacity_of_pool++;
+                            }
+                            if (!this.terminate){
+                                synchronized (lock){
+                                    pool[i] = Qtask.poll().getFuture();
+                                    if (!Qtask.isEmpty()){
+                                        this.current_max = Qtask.peek().getTaskType().getPriorityValue();
+                                    }
+                                }
+                            }
+                            else{
+                                pool[i] = Qtask.poll().getFuture();
                                 if (!Qtask.isEmpty()){
                                     this.current_max = Qtask.peek().getTaskType().getPriorityValue();
                                 }
@@ -90,15 +105,23 @@ public class CustomExecutor extends Thread{
                     capacity_of_pool--;
                 }
             }
-            try {
+            synchronized (wait){
+                try {
+                    wait.wait(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            /*try {
                 sleep(1);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
         }
     }
 
     public void gracefullyTerminate(){
+        terminate=true;
         synchronized (lock){
             while (!Qtask.isEmpty()){
                 while (this.capacity_of_pool!=this.minimalcapacity){
