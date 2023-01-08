@@ -1,6 +1,7 @@
 package Ex2_2;
 
 
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
@@ -64,6 +65,29 @@ public class Task<T> implements Callable<T>{
             System.out.println("int given not okay as priority");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "task=" + task +
+                ", priority=" + priority +
+                ", myvalue=" + myvalue +
+                ", myex=" + myex +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task<?> task1 = (Task<?>) o;
+        return task.equals(task1.task) && priority == task1.priority && myvalue.equals(task1.myvalue) && myex.equals(task1.myex);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(task, priority, myvalue, myex);
     }
 
     public T call() throws Exception {
