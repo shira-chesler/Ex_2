@@ -1,4 +1,4 @@
-PART B - EXPLAINED
+PART B - EXPLAINED :
 In order to run the project, one should clone the repository to its' computer or download a zip of it, then open it through an IDE,
 go to the src/Ex2_2/Tests and run it.
 
@@ -13,13 +13,21 @@ When you create a new task, you submit it to the thread pool, which assigns it t
 This can be more efficient than creating a new thread for every task, because creating and starting a new thread can be
 expensive in terms of time and resources.
 
-our implementation of Task starts with implementing Callable. Thus, if one would try Task.start(), the callable thread of the task
-would run. The task class creates instances with factory method (that uses the class's private constructors). 
-The task has priority and a callable objects, as required, and FutureTask and CustomExecutor object (the FutureTask object holds
-the callable and we can get the generic value that returns from the callable from it. The Task holds its executor so that
+Our implementation of Task starts with implementing Callable. Thus, if one would try Task.start(), the callable thread of the task
+would run. The task class is generic and creates instances with factory method (that uses the class's private constructors). 
+The task has a TaskType and a callable objects, as required, and FutureTask and CustomExecutor object (the FutureTask object holds
+the callable, and we can get the generic value that returns from the callable from it. The Task holds its executor so that
 if we change the Task's priority, we would be able to notify the executor to make the necessary changes).
 
-The way we implemented CustomExecutor...
+Our implementation of CustomExecutor starts with extending Thread. We're doing it so the CustomExecutor will have a daemon thread
+that runs in the background and does all the stuff we were asked to do again and again in the assignment (such as getting rid
+of unused threads, inserting new ones from the queue, updating the currentMaxPriority ect). In Order to save the tasks, sorted by priority - we used a 
+PriorityQueue that gets as a parameter a comparator that we implemented (the PriorityComparator class).
+Moreover, we made sure that as we were asked in the instructions - to lock the access to the queue every time it is used, by using
+an object named lock and synchronizing it. 
 
-The test checks... different priorities, calleables that returns different values (generic), checks
-get max priority.
+The test checks functionality and execution of tasks with different priorities using the CustomExecutor,
+Tasks with callables that returns different values, and checks the getMaxPriority function in O(1) time.
+
+Class Diagram:
+![דיאגרמת מחלקות חלק 2.jpg](..%2F..%2F..%2F..%2F%3F%3F%3F%3F%3F%2F%3F%3F%3F%20%3F%2F%3F%3F%3F%3F%3F%20%3F%2F%3F%3F%3F%3F%3F%20%3F%3F%3F%3F%3F%20%3F%3F%3F%3F%3F%2F%3F%3F%3F%3F%3F%2F%3F%3F%3F%3F%202%2F%3F%3F%3F%3F%3F%3F%3F%20%3F%3F%3F%3F%3F%3F%20%3F%3F%3F%202.jpg)
