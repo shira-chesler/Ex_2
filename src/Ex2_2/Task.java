@@ -11,12 +11,23 @@ public class Task<T> implements Callable<T>{
     private FutureTask<T> myvalue;
     private CustomExecutor myex=null;
 
+    /**
+     *
+     * @param task
+     * @param type
+     * @param <V>
+     */
     private <V> Task(Callable<V> task, TaskType type){
         this.task = task;
         this.priority = type;
         this.myvalue = new FutureTask(this.task);
     }
 
+    /**
+     *
+     * @param task
+     * @param <V>
+     */
     private <V> Task(Callable<V> task){
         this.task = task;
         this.priority = TaskType.OTHER;
@@ -24,10 +35,21 @@ public class Task<T> implements Callable<T>{
         this.myvalue = new FutureTask<T>(this.task);
     }
 
+    /**
+     *
+     * @return
+     */
     public FutureTask getFuture(){
         return this.myvalue;
     }
 
+    /**
+     *
+     * @param task
+     * @param type
+     * @return
+     * @param <V>
+     */
     public static <V> Task<V> createTask(Callable<V> task, TaskType type){ //factory method to create instances
         if (type.getType() == TaskType.COMPUTATIONAL){
             return new Task(task, type);
@@ -39,19 +61,37 @@ public class Task<T> implements Callable<T>{
         return null;
     }
 
+    /**
+     *
+     * @param task
+     * @return
+     * @param <V>
+     */
     public static <V> Task<V> createTask(Callable<V> task){ //factory method to create instances
         Task<V> tsk = new Task(task);
         return tsk;
     }
 
+    /**
+     *
+     * @return
+     */
     public TaskType getTaskType(){
         return this.priority;
     }
 
+    /**
+     *
+     * @param customExecutor
+     */
     public void setExecutor(CustomExecutor customExecutor) {
         this.myex = customExecutor;
     }
 
+    /**
+     *
+     * @param priority
+     */
     public void setPriority(int priority) {
         try {
             this.priority.setPriority(priority);
@@ -67,6 +107,10 @@ public class Task<T> implements Callable<T>{
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "Task{" +
@@ -77,6 +121,11 @@ public class Task<T> implements Callable<T>{
                 '}';
     }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,11 +134,20 @@ public class Task<T> implements Callable<T>{
         return task.equals(task1.task) && priority == task1.priority && myvalue.equals(task1.myvalue) && myex.equals(task1.myex);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         return Objects.hash(task, priority, myvalue, myex);
     }
 
+    /**
+     *
+     * @return
+     * @throws Exception
+     */
     public T call() throws Exception {
         Thread th = new Thread(this.myvalue);
         th.start();
