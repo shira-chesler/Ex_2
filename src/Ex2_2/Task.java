@@ -12,10 +12,10 @@ public class Task<T> implements Callable<T>{
     private CustomExecutor myex=null;
 
     /**
-     *
-     * @param task
-     * @param type
-     * @param <V>
+     * A task constructor
+     * @param task - callable for the task
+     * @param type - type for a task
+     * @param <V> indicates that the task created is of a generic type
      */
     private <V> Task(Callable<V> task, TaskType type){
         this.task = task;
@@ -24,9 +24,9 @@ public class Task<T> implements Callable<T>{
     }
 
     /**
-     *
-     * @param task
-     * @param <V>
+     * A task constructor
+     * @param task - callable for the task
+     * @param <V> indicates that the task created is of a generic type
      */
     private <V> Task(Callable<V> task){
         this.task = task;
@@ -36,19 +36,19 @@ public class Task<T> implements Callable<T>{
     }
 
     /**
-     *
-     * @return
+     * returns the FutureTask object of the Task class
+     * @return the FutureTask object of the Task class
      */
     public FutureTask getFuture(){
         return this.myvalue;
     }
 
     /**
-     *
-     * @param task
-     * @param type
-     * @return
-     * @param <V>
+     * design pattern factory method that creates instances of the class
+     * @param task - callable for the task
+     * @param type - type for a task
+     * @return the task created
+     * @param <V> indicates that the task created is of a generic type
      */
     public static <V> Task<V> createTask(Callable<V> task, TaskType type){ //factory method to create instances
         if (type.getType() == TaskType.COMPUTATIONAL){
@@ -62,10 +62,10 @@ public class Task<T> implements Callable<T>{
     }
 
     /**
-     *
-     * @param task
-     * @return
-     * @param <V>
+     * design pattern factory method that creates instances of the class
+     * @param task - callable for the task
+     * @return the task created
+     * @param <V> indicates that the task created is of a generic type
      */
     public static <V> Task<V> createTask(Callable<V> task){ //factory method to create instances
         Task<V> tsk = new Task(task);
@@ -73,24 +73,24 @@ public class Task<T> implements Callable<T>{
     }
 
     /**
-     *
-     * @return
+     * returns the TaskType of the Task object
+     * @return the TaskType of the Task object
      */
     public TaskType getTaskType(){
         return this.priority;
     }
 
     /**
-     *
-     * @param customExecutor
+     * sets the executor of the task
+     * @param customExecutor the executor of the class
      */
     public void setExecutor(CustomExecutor customExecutor) {
         this.myex = customExecutor;
     }
 
     /**
-     *
-     * @param priority
+     * sets the priority of the task
+     * @param priority the priority of the task
      */
     public void setPriority(int priority) {
         try {
@@ -108,8 +108,8 @@ public class Task<T> implements Callable<T>{
     }
 
     /**
-     *
-     * @return
+     * Returns a string representation of the object
+     * @return a string representation of the object
      */
     @Override
     public String toString() {
@@ -122,9 +122,9 @@ public class Task<T> implements Callable<T>{
     }
 
     /**
-     *
-     * @param o
-     * @return
+     * Indicates whether some other object is "equal to" this one.
+     * @param o the reference object with which to compare.
+     * @return true if this object is the same as the obj argument; false otherwise.
      */
     @Override
     public boolean equals(Object o) {
@@ -135,8 +135,8 @@ public class Task<T> implements Callable<T>{
     }
 
     /**
-     *
-     * @return
+     * Returns a hash code value for the object
+     * @return a hash code value for this object.
      */
     @Override
     public int hashCode() {
@@ -144,8 +144,8 @@ public class Task<T> implements Callable<T>{
     }
 
     /**
-     *
-     * @return
+     * function that activates the task
+     * @return generic value of some kind (that returned from the callable of the task)
      * @throws Exception
      */
     public T call() throws Exception {
